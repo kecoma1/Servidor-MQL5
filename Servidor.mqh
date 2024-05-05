@@ -97,6 +97,7 @@ SOCKET Servidor::accept_client() {
 string Servidor::receive_message(int buff_size=1024) {
    uchar tpl[];
    uchar client_msg[];
+   string msg = "";
 
    if(this.server_socket == INVALID_SOCKET) this.init();
    else {
@@ -106,11 +107,11 @@ string Servidor::receive_message(int buff_size=1024) {
       
       do {
          client=this.accept_client();
-         if(client==INVALID_SOCKET) return "";
+         if(client==INVALID_SOCKET) return msg;
          
          recv(client, client_msg, 1024, 0);
          
-         string msg = CharArrayToString(client_msg);
+         msg += CharArrayToString(client_msg);
          if (StringLen(msg) > 0) Print("[INFO] Mensaje recibido: "+msg);
          
          StringToCharArray("OK", tpl);
@@ -123,5 +124,5 @@ string Servidor::receive_message(int buff_size=1024) {
       } while(client!=INVALID_SOCKET);
    }
    
-   return CharArrayToString(client_msg);
+   return msg;
 }
